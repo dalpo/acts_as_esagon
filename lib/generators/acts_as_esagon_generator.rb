@@ -28,7 +28,7 @@ class ActsAsEsagonGenerator < Rails::Generators::Base
   def generate_migration
     if options.migration? then
       if list_of_models.size > 0
-        template "migration.rb", "db/migrate/#{Time.now.strftime('%Y%m%d%H%M%S')}_#{migration_name.underscore}.rb"
+        template "migration_template.erb", "db/migrate/#{Time.now.strftime('%Y%m%d%H%M%S')}_#{migration_name.underscore}.rb"
       else
         puts "No need to migrate: #{list_of_models(nil, true).map { |m| m.camelize }.join(', ')}"
       end
@@ -48,12 +48,12 @@ class ActsAsEsagonGenerator < Rails::Generators::Base
     end
        
     template=ERB.new <<-EOF
-      acts_as_esagon_entity :label => '#{model_name.camelcase}', :title => 'id' do |e|
-      <%col_with_options.each do |c,opt|%>
-        e.<%=c%> '<%=c.camelcase%>'<%if !opt.blank?%>, <%= opt.to_s %> <%end%>
-        <%end%>
-      end
-    EOF
+  acts_as_esagon_entity :label => '#{model_name.camelcase}', :title => 'id' do |e|
+  <%col_with_options.each do |c,opt|%>
+    e.<%=c%> '<%=c.camelcase%>'<%if !opt.blank?%>, <%= opt.to_s %> <%end%>
+    <%end%>
+  end
+EOF
     add_code model_name, template.result(binding)
   end
 
