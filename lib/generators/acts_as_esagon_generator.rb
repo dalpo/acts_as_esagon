@@ -48,31 +48,38 @@ class ActsAsEsagonGenerator < Rails::Generators::Base
     end
        
     template=ERB.new <<-EOF
-    acts_as_esagon_entity :label => #{model_name.camelcase}, :title => 'id' do |e|
-    <%col_with_options.each do |c,opt|%>
-      e.<%=c%> '<%=c.camelcase%>'<%if !opt.blank?%>, <%= opt.to_s %> <%end%>
-      <%end%>
-    end
-EOF
+      acts_as_esagon_entity :label => '#{model_name.camelcase}', :title => 'id' do |e|
+      <%col_with_options.each do |c,opt|%>
+        e.<%=c%> '<%=c.camelcase%>'<%if !opt.blank?%>, <%= opt.to_s %> <%end%>
+        <%end%>
+      end
+    EOF
     add_code model_name, template.result(binding)
   end
 
-  def get_options_for model_name,column
-    aux=nil
-    if column.match(/content_type/) 
-      aux={:export=>false}
-    elsif column.match(/file_name/)
+  def get_options_for model_name, column
+    aux = nil
+    
+    if column.match(/_content_type|_file_size|_updated_at/)
+      
+      aux = { :export => false }
+
+    elsif column.match(/_file_name/)
       
       begin
-      if model_name.classify.constantize.attachment_definitions.include? column.gsub("_file_name","").to_sym
-        aux= {:repository=>model_name.classify.constantize.attachment_definitions[column.gsub("_file_name","").to_sym][:url].split("/")[0..-2].join("/")}
+        paperclip_field = column.gsub("_file_name","").to_sym
+        attachment_definitions = model_name.classify.constantize.attachment_definitions
+        
+        if attachment_definitions.include?(paperclip_field)
+          aux = { :repository => attachment_definitions[paperclip_field][:url].split("/")[0..-2].join("/") }
+        end
+
+      rescue Exception => e
+        puts "WARNING: Check #{model_name} paperclip url option."
       end
-      rescue Exception=>e
-      puts "WARNING: check #{model_name} paperclip url ."
-      end
-    elsif column.match(/file_size/)
-      aux={:export=>false}
+      
     end
+    
     aux
   end
 

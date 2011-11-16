@@ -1,0 +1,31 @@
+= Esagon on Rails
+
+
+
+== Installation:
+
+==== Adding a submodule
+
+  git submodule add git@github.com:dalpo/acts_as_esagon.git vendor/plugins/acts_as_esagon
+  git submodule init && git submodule update
+
+==== As a rails plugin
+
+  rails plugin install git@github.com:dalpo/acts_as_esagon.git
+
+
+
+== Generator options:
+
+==== Model definition
+
+  rails g acts_as_esagon --configuration
+
+==== Database migrations
+
+  rails g acts_as_esagon --migration
+
+==== XML generation
+
+  rails g acts_as_esagon --xml
+
