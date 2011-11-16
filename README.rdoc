@@ -9,7 +9,7 @@
   git submodule add git@github.com:dalpo/acts_as_esagon.git vendor/plugins/acts_as_esagon
   git submodule init && git submodule update
 
-==== As a rails plugin
+==== As rails plugin
 
   rails plugin install git@github.com:dalpo/acts_as_esagon.git
 
