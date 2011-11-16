@@ -71,7 +71,7 @@ EOF
         attachment_definitions = model_name.classify.constantize.attachment_definitions
         
         if attachment_definitions.include?(paperclip_field)
-          aux = { :repository => attachment_definitions[paperclip_field][:url].split("/")[0..-2].join("/") }
+          aux = { :repository => attachment_definitions[paperclip_field][:url].split("/")[0..-2].join("/").to_sym + "/" }
         end
 
       rescue Exception => e
