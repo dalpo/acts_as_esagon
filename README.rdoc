@@ -9,7 +9,7 @@
   git submodule add git@github.com:dalpo/acts_as_esagon.git vendor/plugins/acts_as_esagon
   git submodule init && git submodule update
 
-====== Capistrano
+==== Capistrano
 
 To use submodules with capistrano you should put this conf under deploy.rb
 
